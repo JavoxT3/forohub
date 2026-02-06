@@ -6,7 +6,6 @@ import com.alura.forohub.model.StatusTopico;
 import com.alura.forohub.model.Topico;
 import com.alura.forohub.repository.TopicoRepository;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -60,5 +59,17 @@ public class TopicoController {
                 .map(DatosListadoTopico::new);
 
         return ResponseEntity.ok(page);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> detallarTopicos(@PathVariable Long id) {
+        var optionalTopico = repository.findById(id);
+
+        if (optionalTopico.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        var topico = optionalTopico.get();
+        return ResponseEntity.ok(new DatosListadoTopico(topico));
     }
 }
