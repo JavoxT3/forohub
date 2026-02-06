@@ -106,7 +106,7 @@ public class TopicoController {
     public ResponseEntity<?> eliminarTopico(@PathVariable Long id) {
         Optional<Topico> optionalTopico = repository.findById(id);
 
-        if (optionalTopico.isEmpty()) {
+        if (!optionalTopico.isPresent()) {
             return ResponseEntity.notFound().build();
         }
 
