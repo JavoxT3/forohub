@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/topicos")
@@ -70,6 +71,33 @@ public class TopicoController {
         }
 
         var topico = optionalTopico.get();
+        return ResponseEntity.ok(new DatosListadoTopico(topico));
+    }
+
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<?> actualizarTopico(
+            @PathVariable Long id,
+            @RequestBody @Valid DatosRegistroTopico datos
+    ) {
+        Optional<Topico> optionalTopico = repository.findById(id);
+
+        if (!optionalTopico.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        if (repository.existsByTituloAndMensaje(datos.titulo(), datos.mensaje())) {
+            return ResponseEntity.badRequest()
+                    .body("Ya existe un tópico con el mismo título y mensaje");
+        }
+
+        Topico topico = optionalTopico.get();
+
+        topico.setTitulo(datos.titulo());
+        topico.setMensaje(datos.mensaje());
+        topico.setAutor(datos.autor());
+        topico.setCurso(datos.curso());
+
         return ResponseEntity.ok(new DatosListadoTopico(topico));
     }
 }
