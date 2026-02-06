@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 public record DatosListadoTopico(
+        Long id,
         String titulo,
         String mensaje,
         LocalDateTime fechaCreacion,
@@ -17,6 +18,7 @@ public record DatosListadoTopico(
 ) {
     public DatosListadoTopico(Topico topico) {
         this(
+                topico.getId(),
                 topico.getTitulo(),
                 topico.getMensaje(),
                 topico.getFechaCreacion(),
