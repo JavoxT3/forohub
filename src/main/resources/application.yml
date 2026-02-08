@@ -3,3 +3,7 @@ spring:
     url: jdbc:mysql://localhost:3306/forohub
     username: root
     password: Bass#4432Tab
+
+jwt:
+  secret: 123456
+  expiration: 3600000
