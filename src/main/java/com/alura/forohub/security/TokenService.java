@@ -38,4 +38,19 @@ public class TokenService {
                 .plusHours(expiration)
                 .toInstant(ZoneOffset.of("-05:00"));
     }
+
+    public String getSubject(String tokenJWT) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+
+            return JWT.require(algorithm)
+                    .build()
+                    .verify(tokenJWT)
+                    .getSubject();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Token JWT inválido o expirado");
+        }
+    }
+
 }
